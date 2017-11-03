@@ -1,0 +1,56 @@
+cluster:
+  name: ${CLUSTER_NAME}
+
+node:
+  master: ${NODE_MASTER}
+  data: ${NODE_DATA}
+  name: ${NODE_NAME}
+  ingest: ${NODE_INGEST}
+  max_local_storage_nodes: ${MAX_LOCAL_STORAGE_NODES}
+
+network.host: ${NETWORK_HOST}
+
+path:
+  data: /data/data
+  logs: /data/log
+
+bootstrap:
+  memory_lock: ${MEMORY_LOCK}
+
+http:
+  enabled: ${HTTP_ENABLE}
+  compression: true
+  cors:
+    enabled: ${HTTP_CORS_ENABLE}
+    allow-origin: ${HTTP_CORS_ALLOW_ORIGIN}
+
+discovery:
+  zen:
+    ping.unicast.hosts: ${DISCOVERY_SERVICE}
+    minimum_master_nodes: ${NUMBER_OF_MASTERS}
+
+readonlyrest:
+ enable: true
+ response_if_req_forbidden: Access denied!!!
+
+ access_control_rules:
+
+  - name: "::Fluent::"
+    auth_key_sha256: 0e2544358ef481bf6579c1ea18fc45e9de18318dda341e4607ae988ee52869be
+    type: allow
+    actions: ["indices:admin/create","indices:data/write/index","indices:data/write/bulk","indices:data/write/bulk[s]","indices:admin/flush","indices:admin/mapping/put","cluster:monitor/main"]
+ 
+  - name: "::read::"
+    auth_key_sha256: f201f399bd7da432b5335144e1f95da57a2ad9472e2fd11ad6e7b341cfc721c9
+    actions: ["indices:data/read/*","indices:data/write/*","indices:admin/template/*","indices:admin/create","cluster:monitor/main","cluster:monitor/state"]
+
+  - name: "::Kibana server::"
+    auth_key_sha256: 95b485e3d401108ade991aa5d15a3cf8b74268b0fa48460b35403cbb58c36cc5
+    type: allow
+
+  - name: "::Kibana user::"
+    auth_key_sha256: d5e369cb391e9365cc4a5b217ad4c08939be36856e06e55c348f98ab1b8f0ea4
+    type: allow
+    kibana_access: admin
+    indices: [".kibana*","log-*","*journal*","*px*","*kubelet*"]
+
