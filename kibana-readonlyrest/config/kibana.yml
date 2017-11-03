@@ -1,0 +1,10 @@
+
+---
+# Default Kibana configuration using ReadOnlyrest.
+
+server.name: kibana
+server.host: "0"
+elasticsearch.url: http://elasticsearch:9200
+elasticsearch.username: #Make sure you mention your username and password which matches the SHA-56 mentioned in the readonly rest block rules
+elasticsearch.password: #Your password for Kibana server to access Elasticsearch
+xpack.monitoring.ui.container.elasticsearch.enabled: false
