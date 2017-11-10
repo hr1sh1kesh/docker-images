@@ -49,8 +49,35 @@ readonlyrest:
     type: allow
 
   - name: "::Kibana user::"
-    auth_key_sha256: d5e369cb391e9365cc4a5b217ad4c08939be36856e06e55c348f98ab1b8f0ea4
+#    auth_key_sha256: d5e369cb391e9365cc4a5b217ad4c08939be36856e06e55c348f98ab1b8f0ea4
+    ldap_auth:
+      name: "ldap"
+      groups: ["team1","team2","team3"]
     type: allow
     kibana_access: admin
     indices: [".kibana*","log-*","*journal*","*px*","*kubelet*"]
+ 
+  - name: Accept requests from users authenticated via LDAP and are in groups team1-3
+    type: allow
+    ldap_auth:
+      name: "ldap"
+      groups: ["team1","team2","team3"]
+    actions: ["indices:admin/create","indices:data/write/index","indices:data/write/bulk","indices:data/write/bulk[s]","indices:admin/flush","indices:admin/mapping/put","cluster:monitor/main","cluster:monitor/state"]
 
+ ldaps:
+  
+  - name: ldap
+    host: "ldap-service"
+    port: 389
+    ssl_enabled: false
+    ssl_trust_all_certs: true
+    search_user_base_DN: "ou=users,dc=example,dc=org"
+    user_id_attribute: "uid"
+    search_groups_base_DN: "ou=groups,dc=example,dc=org"
+    bind_dn: "cn=admin,dc=example,dc=org"
+    bind_password: "admin"
+    unique_member_attribute: "uniqueMember"
+    connection_pool_size: 10
+    connection_timeout_in_sec: 10
+    request_timeout_in_sec: 10
+    cache_ttl_in_sec: 60
