@@ -49,7 +49,7 @@ readonlyrest:
     type: allow
 
   - name: "::Kibana user::"
-#    auth_key_sha256: d5e369cb391e9365cc4a5b217ad4c08939be36856e06e55c348f98ab1b8f0ea4
+#   auth_key_sha256: d5e369cb391e9365cc4a5b217ad4c08939be36856e06e55c348f98ab1b8f0ea4
     ldap_auth:
       name: "ldap"
       groups: ["team1","team2","team3"]
